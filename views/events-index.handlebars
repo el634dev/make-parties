@@ -1,9 +1,10 @@
 {{!-- views/events-index.handlebars --}}
 <div class="row mt-4">
     <div class="col-lg-6 offset-lg-3">
+        <h1>New Event</h1>
+        <a href="/events/new">Create Event</a>
         <h1>Events</h1>
         {{#each events}}
-            <main>
                 <div class="card mt-3">
                     <img class="card-img-top" src="{{this.imgUrl}}" alt="Pug wrapped in blanket">
                     {{!-- Card body --}}
@@ -19,7 +20,6 @@
                         </div>
                     </div>
                 </div>
-            </main>
         {{/each}}
     </div>
 </div>

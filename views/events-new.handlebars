@@ -1,0 +1,23 @@
+{{!-- views/events-new.handlebars --}}
+
+<div class="container d-flex justify-content-center mt-4">
+    <form method="POST" action="/events">
+  <fieldset>
+    <legend>New Event</legend>
+    <!-- Event Title -->
+    <p>
+      <label for="title">Event Title</label><br>
+      <input type="text" name="title" />
+    </p>
+    <p>
+      <label for="desc">Event Description</label><br>
+      <input type="text" name="desc" />
+    </p>
+  </fieldset>
+  <!-- Submit Button -->
+  <p>
+    <button type="submit">Submit</button>
+  </p>
+
+</form>
+</div>

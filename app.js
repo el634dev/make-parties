@@ -1,6 +1,10 @@
-// Initialize express
+// Initialize express and other libs
 const express = require('express');
+// Initialize Body-Parser and add it to app
+const bodyParser = require('body-parser');
 const app = express();
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // --------------------
 // Require handlebars
@@ -27,6 +31,16 @@ const events = [
 // Index, show all events
 app.get('/', (req, res) => {
     res.render('events-index', { events: events });
+})
+
+// new, create new events
+app.get('/events/new', (req, res) => {
+    res.render('events-new', {});
+})
+
+// create, POST request route
+app.post('/events', (req, res) => {
+    console.log(req.body);
 })
 
 // --------------------

@@ -1,7 +1,25 @@
 {{!-- views/events-index.handlebars --}}
-<h1>Events</h1>
-{{#each events}}
-    <h2>{{this.title}}</h2>
-    <img class="img-fluid" src="{{this.imgUrl}}" alt="Card image cap">
-    <p>{{this.description}}</p>
-{{/each}}
+<div class="row mt-4">
+    <div class="col-lg-6 offset-lg-3">
+        <h1>Events</h1>
+        {{#each events}}
+            <main>
+                <div class="card mt-3">
+                    <img class="card-img-top" src="{{this.imgUrl}}" alt="Pug wrapped in blanket">
+                    {{!-- Card body --}}
+                    <div class="card-body">
+                        {{!-- Card Title --}}
+                        <h5 class="card-title">{{this.title}}</h5>
+                        {{!-- Card Description --}}
+                        <p class="card-text">{{this.desc}}</p>
+                        {{!-- Buttons --}}
+                        <div class="text-right float-end">
+                            <a href="#" class="btn btn-info">Rsvp</a>
+                            <a href="#" class="btn btn-primary">View</a>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        {{/each}}
+    </div>
+</div>

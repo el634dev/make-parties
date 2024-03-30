@@ -2,19 +2,24 @@
 const express = require('express');
 // Initialize Body-Parser and add it to app
 const bodyParser = require('body-parser');
+const models = require('./models');
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // --------------------
 // Require handlebars
-const exphbs = require('express-handlebars');
+const exhbs = require('express-handlebars');
 const Handlebars = require('handlebars')
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
 
 // --------------------
 // Use 'main' as our default layout
-app.engine('handlebars', exphbs.engine({ defaultLayout: 'main', handlebars: allowInsecurePrototypeAccess(Handlebars) }));
+app.engine('handlebars', exhbs.engine({ 
+  handlebars: allowInsecurePrototypeAccess(Handlebars),
+  defaultLayout: 'layout'
+}));
+
 // Use handlebars to render
 app.set('view engine', 'handlebars');
 
@@ -30,21 +35,29 @@ const events = [
 
 // Index, show all events
 app.get('/', (req, res) => {
-    res.render('events-index', { events: events });
+    models.Event.findAll({ order: [['createdAt', 'DESC']] }).then(events => {
+      res.render('events-index', { events: events });
+    })
 })
 
 // new, create new events
 app.get('/events/new', (req, res) => {
-    res.render('events-new', {});
+  models.Event.findAll().then(events => {
+    res.render('events-new', { events: events });
+  })
 })
 
 // create, POST request route
 app.post('/events', (req, res) => {
-    console.log(req.body);
+  models.Event.create(req.body).then(event => {
+    res.redirect(`/`);
+  }).catch((err) => {
+    console.log(err)
+  });
 })
 
 // --------------------
-// PORT
+// PORTS
 // --------------------
 
 // Choose port to listen on

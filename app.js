@@ -20,11 +20,10 @@ app.engine('handlebars', exhbs.engine({
   defaultLayout: 'layout'
 }));
 
+// --------------------
 // Use handlebars to render
 app.set('view engine', 'handlebars');
 
-// --------------------
-// ROUTES
 // --------------------
 // Mock array of projects
 const events = [
@@ -32,6 +31,10 @@ const events = [
     { title: "I am your second event", desc: "A great event that is super fun to look at and good", imgUrl: "https://images.unsplash.com/photo-1453227588063-bb302b62f50b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHB1cHB5JTIwcnVubmluZ3xlbnwwfHwwfHx8MA%3D%3D" },
     { title: "I am your third event", desc: "A great event that is super fun to look at and good", imgUrl: "https://images.unsplash.com/photo-1453227588063-bb302b62f50b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHB1cHB5JTIwcnVubmluZ3xlbnwwfHwwfHx8MA%3D%3D" }
 ]  
+
+// --------------------
+// ROUTES
+// --------------------
 
 // Index, show all events
 app.get('/', (req, res) => {
@@ -47,13 +50,26 @@ app.get('/events/new', (req, res) => {
   })
 })
 
-// create, POST request route
+// CREATE, POST request route
 app.post('/events', (req, res) => {
   models.Event.create(req.body).then(event => {
-    res.redirect(`/`);
+    // Redirect to events/:id
+    res.redirect(`/events/${event.id}`)
   }).catch((err) => {
     console.log(err)
   });
+})
+
+// SHOW, GET request route
+app.get('/events/:id', (req, res) => {
+  // Search for the event by its id that was passed in via req.params
+  models.Event.findByPk(req.params.id).then((event) => {
+    // If the id is for a valid event, show it
+    res.render('events-show', { event: event })
+  }).catch((err) => {
+    // if they id was for an event not in our db, log an error
+    console.log(err.message);
+  })
 })
 
 // --------------------

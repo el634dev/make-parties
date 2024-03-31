@@ -1,0 +1,17 @@
+{{!-- views/partials/events-form.handlebars --}}
+
+{{!-- Event Title --}}
+<div class="form-group">
+  <label for="title">Title</label>
+  <input name="title" class="form-control" placeholder="Event Title" value="{{event.title}}" />
+</div>
+{{!-- Description --}}
+<div class="form-group">
+  <label for="desc">Description</label>
+  <textarea name="desc" class="form-control" placeholder="A description of your event.">{{event.desc}}</textarea>
+</div>
+{{!-- Image Url --}}
+<div class="form-group">
+  <label for="imgUrl">Image Url</label>
+  <input name="imgUrl" class="form-control" placeholder="" value="{{event.imgUrl}}"/>
+</div>

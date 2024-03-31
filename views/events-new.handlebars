@@ -1,29 +1,12 @@
 {{!-- views/events-new.handlebars --}}
 
 <div class="container d-flex justify-content-center mt-4">
-    <form method="POST" action="/events">
-  <fieldset>
-    <legend>New Event</legend>
-    <!-- Event Title -->
-    <p>
-      <label for="title">Event Title</label><br>
-      <input type="text" name="title" />
-    </p>
-    {{!-- ImageUrl Input --}}
-    <p>
-      <label for="imgUrl">Image Url</label><br>
-      <input type="text" placeholder="" name="imgUrl" />
-    </p>
-    {{!-- Event Description Input --}}
-    <p>
-      <label for="desc">Event Description</label><br>
-      <input type="text" name="desc" />
-    </p>
-  </fieldset>
-  <!-- Submit Button -->
-  <p>
-    <button type="submit">Submit</button>
-  </p>
-
-</form>
+      <form action="/events" method="post">
+      <h2>New Event</h2>
+        {{> events-form }}
+        {{!-- Submit Button --}}
+       <div class="text-right">
+          <button type="submit" class="btn btn-primary mt-3" name="button">Save</button>
+      </div>
+    </form>
 </div>

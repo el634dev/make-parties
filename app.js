@@ -4,6 +4,8 @@ const methodOverride = require('method-override');
 // Initialize Body-Parser and add it to app
 const bodyParser = require('body-parser');
 
+// Choose port to listen on
+const PORT = process.env.PORT || 3000;
 const models = require('./models');
 const app = express();
 
@@ -41,9 +43,6 @@ const events = [
 // --------------------
 // PORTS
 // --------------------
-
-// Choose port to listen on
-const PORT = process.env.PORT || 3000;
 
 // Tell the app what port to listen on
 app.listen(PORT, () => {

@@ -7,18 +7,15 @@
                 <div class="card-title">
                     <h3>Update Event</h3>
                 </div>
+                {{!-- Event Form --}}
                 <div class="card-text">
                     <form action="/events/{{event.id}}?_method=PUT" method="post">
-                        {{> events-form}}
+                        {{> events-form }}
                         {{!-- Buttons --}}
-                        <div class="text-right mt-3">
-                            <a href="/events/{{event.id}}" class='text-muted mr-2 text-decoration-none'>Cancel</a>     
+                        <div class="text-right mt-2">
                             <button type="submit" class="btn btn-primary" name="button">Update</button>
+                            <a href="/" class='text-muted text-decoration-none mr-2'>Cancel</a>
                         </div>
-                    </form>
-                    {{!-- Delete Form --}}
-                    <form action="/events/{{event.id}}?_method=DELETE" method="POST">
-                        <button type="submit" class='btn btn-danger'>Delete</button>
                     </form>
                 </div>
             </div>

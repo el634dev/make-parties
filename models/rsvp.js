@@ -1,0 +1,28 @@
+'use strict';
+const {
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class Rsvp extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+      Rsvp.associate = function(models) {
+        // EventId
+        Rsvp.belongsTo(models.Event);
+      }
+    }
+  }
+  Rsvp.init({
+    name: DataTypes.STRING,
+    email: DataTypes.STRING
+  }, {
+    sequelize,
+    modelName: 'Rsvp',
+  });
+  return Rsvp;
+};

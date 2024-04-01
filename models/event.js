@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
     imgUrl: DataTypes.STRING //add this line (don't forget the comma above!)
   }, {});
 
+  Event.associate = function(models) {
+    Event.hasMany(models.Rsvp);
+  };
+  
   Event.init({
     title: DataTypes.STRING,
     desc: DataTypes.TEXT,

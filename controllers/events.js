@@ -83,11 +83,10 @@ module.exports = function(app, models) {
 
     // --------------------
     // SHOW
-    app.get('/events/:id', (req, res) => {
-        models.Event.findByPk(req.params.id, { include: [{ model: models.Rsvp }] }).then(event => {
-            res.render('events-show', { event: event });
-        }).catch((err) => {
-            console.log(err.message);
-        })
+    app.get('/events/:id', async (req, res) => {
+        let event = await models.Event.findById(req.params.id)
+        let comments = event.getComments({ order: [ ['createdAt', 'DESC'] ] });
+        let rsvps = event.getRsvps()
+        res.render('events-show', { comments: comments, event: event, rsvps: rsvps });
     });
 }

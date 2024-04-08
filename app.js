@@ -3,18 +3,20 @@ const express = require('express');
 const methodOverride = require('method-override'); 
 // Initialize Body-Parser and add it to app
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
+const models = require('./models');
 
+// --------------------
 // Choose port to listen on
 const PORT = process.env.PORT || 3000;
-const models = require('./models');
+// Create new instance
 const app = express();
 
+// --------------------
 app.use(bodyParser.urlencoded({ extended: true }));
 // override with POST having ?_method=DELETE or ?_method=PUT
 app.use(methodOverride('_method'))
-
-require('./controllers/events')(app, models);
-require('./controllers/rsvps')(app, models);
 
 // --------------------
 // Require handlebars
@@ -34,12 +36,50 @@ app.engine('handlebars', exhbs.engine({
 app.set('view engine', 'handlebars');
 
 // --------------------
-// Mock array of projects
-const events = [
-    { title: "I am your first event", desc: "A great event that is super fun to look at and good", imgUrl: "https://images.unsplash.com/photo-1453227588063-bb302b62f50b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHB1cHB5JTIwcnVubmluZ3xlbnwwfHwwfHx8MA%3D%3D" },
-    { title: "I am your second event", desc: "A great event that is super fun to look at and good", imgUrl: "https://images.unsplash.com/photo-1453227588063-bb302b62f50b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHB1cHB5JTIwcnVubmluZ3xlbnwwfHwwfHx8MA%3D%3D" },
-    { title: "I am your third event", desc: "A great event that is super fun to look at and good", imgUrl: "https://images.unsplash.com/photo-1453227588063-bb302b62f50b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHB1cHB5JTIwcnVubmluZ3xlbnwwfHwwfHx8MA%3D%3D" }
-]  
+// Auth Middleware
+app.use(cookieParser());
+
+app.use(function authenticateToken(req, res, next) {
+  // Gather the jwt access token from the cookie
+  const token = req.cookies.mpJWT;
+
+  if (token) {
+    jwt.verify(token, "AUTH-SECRET", (err, user) => {
+      if (err) {
+        console.log(err)
+        // redirect to login if not logged in and trying to access a protected route
+        res.redirect('/login')
+      }
+      req.user = user
+      next(); // pass the execution off to whatever request the client intended
+    })
+  } else {
+    next();
+  }
+});
+
+app.use(function presentToken(req, res, next) {
+  // if a valid JWT token is present
+  if (req.user) {
+    // Look up the user's record
+    models.User.findByPk(req.user.id)
+      .then(currentUser => {
+        // make the user object available in all controllers and templates
+        res.locals.currentUser = currentUser;
+        next()
+    }).catch(err => {
+        console.log(err)
+    })
+  } else {    
+    next();
+  }
+});
+
+// --------------------
+// Controllers
+require('./controllers/events')(app, models);
+require('./controllers/rsvps')(app, models);
+require('./controllers/auth')(app, models);
 
 // --------------------
 // PORTS
